@@ -2,10 +2,10 @@
     <div>
         <el-form ref="form" :model="form" label-width="80px">
             <el-form-item label="输入问题">
-                <el-input v-model="form.name"></el-input>
+                <el-input v-model="form.ques"></el-input>
             </el-form-item>
             <el-form-item label="设置标签">
-                <el-select v-model="form.labels" multiple filterable allow-create default-first-option
+                <el-select v-model="form.labelIds" multiple filterable allow-create default-first-option
                     placeholder="请选择问题标签">
                     <el-option v-for="item in options" :key="item.labelId" :label="item.labelName" :value="item.labelId">
                     </el-option>
@@ -40,6 +40,7 @@
 //这里可以导入其他文件（比如：组件，工具 js，第三方插件 js，json文件，图片文件等等）
 //例如：import 《组件名称》 from '《组件路径》';
 import axios from 'axios';
+import { Message } from 'element-ui';
 export default {
     //import 引入的组件需要注入到对象中才能使用
     components: {},
@@ -49,11 +50,11 @@ export default {
         return {
             options: [],
             form: {
-                name: '',
+                ques: '',
                 scene: '',
                 source: '',
                 answer: '',
-                labels: []
+                labelIds: []
             }
         };
     },
@@ -66,13 +67,28 @@ export default {
         onSubmit() {
             console.log(this.form.answer)
             axios.post('http://localhost:9500/qa/ques/save', {
-                name:this.form.name,
-                scene:this.form.scene,
-                source:this.form.source,
-                answer:this.form.answer,
-                labels:this.form.labels
-            }).then(function (response) {
-                console.log(response);
+                ques: this.form.ques,
+                scene: this.form.scene,
+                source: this.form.source,
+                answer: this.form.answer,
+                labelIds: this.form.labelIds
+            }).then(res => {  // 必须要用箭头函数
+                console.log(res)
+
+                if (res && res.data.code === 0) {
+                    this.$message({
+                        showClose: true,
+                        message: '已成功添加QA~',
+                        type: 'success'
+                    });
+                    this.form = {};
+                } else {
+                    this.$message({
+                        showClose: true,
+                        message: res.data.msg,
+                        type: 'error'
+                    });
+                }
             }).catch(function (error) {
                 console.log(error);
             });
