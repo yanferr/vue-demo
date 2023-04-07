@@ -13,9 +13,10 @@
             </el-form-item>
             <el-form-item label="提问场景">
                 <el-radio-group v-model="form.scene">
-                    <el-radio label="面试题"></el-radio>
-                    <el-radio label="日常积累"></el-radio>
-                    <el-radio label="debug"></el-radio>
+                    <el-radio label="interview" value="0"></el-radio>
+                    <el-radio label="daily" value="1"></el-radio>
+                    <el-radio label="debug" value="2"></el-radio>
+                    <el-radio label="other" value="3"></el-radio>
                 </el-radio-group>
             </el-form-item>
             <el-form-item label="溯源信息">

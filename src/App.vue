@@ -8,7 +8,7 @@
         <el-menu-item index="0">LOGO</el-menu-item>
         <el-menu-item index="/">添加QA</el-menu-item>
 
-        <el-menu-item index="2">查询QA</el-menu-item>
+        <el-menu-item index="/queryQA">查询QA</el-menu-item>
 
       </el-menu>
     </el-header>
