@@ -1,7 +1,7 @@
 <template>
   <el-container style=" border: 1px solid #eee">
     <el-header>
-      <el-menu router="true"
+      <el-menu router
       :default-active="activeIndex" 
       class="el-menu-demo" 
       mode="horizontal" >

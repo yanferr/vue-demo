@@ -1,10 +1,10 @@
 <template>
     <div>
-        <el-form ref="form" :model="form" label-width="80px">
-            <el-form-item label="输入问题">
+        <el-form ref="form" :rules="rules" :model="form" label-width="80px">
+            <el-form-item label="输入问题" prop="ques">
                 <el-input v-model="form.ques"></el-input>
             </el-form-item>
-            <el-form-item label="设置标签">
+            <el-form-item label="设置标签" prop="labelIds">
                 <el-select v-model="form.labelIds" multiple filterable allow-create default-first-option
                     placeholder="请选择问题标签">
                     <el-option v-for="item in options" :key="item.labelId" :label="item.labelName" :value="item.labelId">
@@ -25,7 +25,7 @@
             <!-- <el-form-item label="能否扩展">
                 <el-switch v-model="form.extend"></el-switch>
             </el-form-item> -->
-            <el-form-item label="输入答案">
+            <el-form-item label="输入答案" prop="answer">
                 <el-input :rows="10" type="textarea" v-model="form.answer"></el-input>
             </el-form-item>
             <el-form-item>
@@ -50,11 +50,23 @@ export default {
         return {
             options: [],
             form: {
-                ques: '',
-                scene: '',
-                source: '',
-                answer: '',
-                labelIds: []
+                ques: null,
+                scene: '日常积累',
+                source: null,
+                answer: null,
+                labelIds: null
+            },
+            rules: {
+                ques: [
+                    { required: true, message: '请输入问题', trigger: 'blur' },
+                    // { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+                ],
+                labelIds: [
+                    { required: true, message: '请打上标签', trigger: 'blur' }
+                ],
+                answer: [
+                    { required: true, message: '请输入答案', trigger: 'blur' }
+                ]
             }
         };
     },
@@ -82,10 +94,12 @@ export default {
                         type: 'success'
                     });
                     this.form = {};
+                    this.form.scene = '日常积累'
                 } else {
+                    console.log(res)
                     this.$message({
                         showClose: true,
-                        message: res.data.msg,
+                        message: res.data.data ,
                         type: 'error'
                     });
                 }
