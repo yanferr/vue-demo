@@ -5,8 +5,9 @@
                 <el-input v-model="form.name"></el-input>
             </el-form-item>
             <el-form-item label="设置标签">
-                <el-select v-model="value" multiple filterable allow-create default-first-option placeholder="请选择问题标签">
-                    <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+                <el-select v-model="form.labels" multiple filterable allow-create default-first-option
+                    placeholder="请选择问题标签">
+                    <el-option v-for="item in options" :key="item.labelId" :label="item.labelName" :value="item.labelId">
                     </el-option>
                 </el-select>
             </el-form-item>
@@ -38,7 +39,7 @@
 <script>
 //这里可以导入其他文件（比如：组件，工具 js，第三方插件 js，json文件，图片文件等等）
 //例如：import 《组件名称》 from '《组件路径》';
-
+import axios from 'axios';
 export default {
     //import 引入的组件需要注入到对象中才能使用
     components: {},
@@ -46,24 +47,13 @@ export default {
     data() {
         //这里存放数据
         return {
-            options: [{
-                value: 'HTML',
-                label: 'HTML'
-            }, {
-                value: 'CSS',
-                label: 'CSS'
-            }, {
-                value: 'JavaScript',
-                label: 'JavaScript'
-            }],
-            value: [],
+            options: [],
             form: {
                 name: '',
-                tag: '',
+                scene: '',
                 source: '',
                 answer: '',
-                scene:'',
-                extend: false
+                labels: []
             }
         };
     },
@@ -74,7 +64,18 @@ export default {
     //方法集合
     methods: {
         onSubmit() {
-            console.log('submit!');
+            console.log(this.form.answer)
+            axios.post('http://localhost:9500/qa/ques/save', {
+                name:this.form.name,
+                scene:this.form.scene,
+                source:this.form.source,
+                answer:this.form.answer,
+                labels:this.form.labels
+            }).then(function (response) {
+                console.log(response);
+            }).catch(function (error) {
+                console.log(error);
+            });
         }
     },
     //生命周期 - 创建完成（可以访问当前 this 实例）
@@ -83,6 +84,16 @@ export default {
     },
     //生命周期 - 挂载完成（可以访问 DOM 元素）
     mounted() {
+
+        axios.get('http://localhost:9500/qa/label/list')
+            .then(response => (
+                this.options = response.data.page.list
+                // console.log(response.data.page.list)
+            ))
+            .catch(function (error) { // 请求失败处理
+                console.log(error);
+            });
+
 
     },
     beforeCreate() { }, //生命周期 - 创建之前

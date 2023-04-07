@@ -4,8 +4,7 @@
       <el-menu router="true"
       :default-active="activeIndex" 
       class="el-menu-demo" 
-      mode="horizontal" 
-      :default-openeds="['/']">
+      mode="horizontal" >
         <el-menu-item index="0">LOGO</el-menu-item>
         <el-menu-item index="/">添加QA</el-menu-item>
 
@@ -26,8 +25,7 @@
 export default {
   data() {
     return {
-      activeIndex: '0',
-      activeIndex2: '1'
+      activeIndex: '/',
     }
 
   },
@@ -48,12 +46,6 @@ export default {
   color: #333;
   line-height: 60px;
 } */
-.el-menu {
-  align-items: right;
-  /* 垂直居中 */
-  justify-content: center;
-  /* 水平居中 */
-}
 
 .el-aside {
   color: #333;
