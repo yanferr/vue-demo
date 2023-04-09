@@ -6,9 +6,7 @@ import router from './router'
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import axios from 'axios' // api: https://github.com/axios/axios
-import qs from 'qs';
 
-Vue.prototype.$qs = qs;
 
 
 // axios.get('https://www.runoob.com/try/ajax/json_demo.json')

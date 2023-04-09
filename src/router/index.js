@@ -4,6 +4,7 @@ import Mytable from '@/components/Mytable'
 import hello from '@/components/hello';
 import addQA from '@/components/addQA';
 import queryQA from '@/components/queryQA';
+import label from '@/components/label';
 
 Vue.use(Router)
 
@@ -18,6 +19,11 @@ export default new Router({
       path: '/queryQA',
       name: '',
       component: queryQA
+    },
+    {
+      path: '/label',
+      name: '',
+      component: label
     }
   ]
 })

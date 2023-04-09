@@ -5,11 +5,10 @@
                 <el-input v-model="form.ques"></el-input>
             </el-form-item>
             <el-form-item label="设置标签" prop="labelIds">
-                <el-select v-model="form.labelIds" multiple filterable allow-create default-first-option
-                    placeholder="请选择问题标签">
-                    <el-option v-for="item in options" :key="item.labelId" :label="item.labelName" :value="item.labelId">
-                    </el-option>
-                </el-select>
+                <el-cascader filterable filterable:filter-method="dataFilter" size="medium" v-model="form.labelIds"
+                    :options="options"
+                    :props="{ checkStrictly: true, expandTrigger: 'hover', value: 'labelId', label: 'labelName' }"
+                    @change="handleChange"></el-cascader>
             </el-form-item>
             <el-form-item label="提问场景">
                 <el-radio-group v-model="form.scene">
@@ -50,9 +49,19 @@ export default {
         //这里存放数据
         return {
             options: [],
+            cateListProps: {
+                value: 'labelId',                 //匹配响应数据中的id
+                label: 'labelName',               //匹配响应数据中的name
+                children: 'children'         //匹配响应数据中的children
+            },
+
+            defaultProps: {
+                children: 'children',
+                label: 'labelName'
+            },
             form: {
                 ques: null,
-                scene: '日常积累',
+                scene: 'daily',
                 source: null,
                 answer: null,
                 labelIds: null
@@ -77,6 +86,37 @@ export default {
     watch: {},
     //方法集合
     methods: {
+        // 标签过滤
+        dataFilter(val) {
+            this.value = val //给绑定值赋值
+
+            if (val) {
+                //val存在筛选数组
+                this.options = this.list.filter((i) => {
+                    let index = -1,
+                        reflag = true
+
+                    // 逐字对比筛选
+                    let valArr = val.split(''),
+                        len = valArr.length
+                    loop: for (let k = 0; k < len; k++) {
+                        if (i.label.indexOf(valArr[k]) <= index) {
+                            reflag = false
+                            break loop
+                        }
+                        index = i.label.indexOf(valArr[k]) //赋筛选的字在i中的索引
+                    }
+
+                    return reflag
+                })
+            } else {
+                //val不存在还原数组
+                this.options = this.list
+            }
+        },
+        handleChange(value) {
+            console.log(value);
+        },
         onSubmit() {
             console.log(this.form.answer)
             axios.post('http://localhost:9500/qa/ques/save', {
@@ -100,14 +140,26 @@ export default {
                     console.log(res)
                     this.$message({
                         showClose: true,
-                        message: res.data.data ,
+                        message: res.data.data,
                         type: 'error'
                     });
                 }
             }).catch(function (error) {
                 console.log(error);
             });
-        }
+        },
+        // processData(list) {
+        //     this.options = [];
+        //     for (let i = 0; i < list.length; i++) {
+        //         let children = [];
+        //         if (list[i].children != null && list[i].children.length > 0) {
+        //             for (let j = 0; j < list[i].children.length; j++) {
+        //                 children.push({ label: list[i].children[j].labelName, value: list[i].children[j].labelId });
+        //             }
+        //         }
+        //         this.options.push({ label: list[i].labelName, value: list[i].labelId, children: children });
+        //     }
+        // }
     },
     //生命周期 - 创建完成（可以访问当前 this 实例）
     created() {
@@ -116,14 +168,16 @@ export default {
     //生命周期 - 挂载完成（可以访问 DOM 元素）
     mounted() {
 
-        axios.get('http://localhost:9500/qa/label/list')
+        axios.get('http://localhost:9500/qa/label/list/tree')
             .then(response => (
-                this.options = response.data.page.list
-                // console.log(response.data.page.list)
+                this.options = response.data.data,
+                console.log(this.options)
+
             ))
             .catch(function (error) { // 请求失败处理
                 console.log(error);
             });
+
 
 
     },
