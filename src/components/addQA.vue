@@ -11,11 +11,11 @@
                     @change="handleChange"></el-cascader>
             </el-form-item>
             <el-form-item label="提问场景">
-                <el-radio-group v-model="form.scene">
-                    <el-radio label="interview" value="0"></el-radio>
-                    <el-radio label="daily" value="1"></el-radio>
-                    <el-radio label="debug" value="2"></el-radio>
-                    <el-radio label="other" value="3"></el-radio>
+                <el-radio-group v-model="form.scene" size="medium">
+                    <el-radio-button label="interview" value="interview"></el-radio-button>
+                    <el-radio-button label="daily" value="daily"></el-radio-button>
+                    <el-radio-button label="debug" value="debug"></el-radio-button>
+                    <el-radio-button label="other" value="other"></el-radio-button>
                 </el-radio-group>
             </el-form-item>
             <el-form-item label="溯源信息">
@@ -135,7 +135,7 @@ export default {
                         type: 'success'
                     });
                     this.form = {};
-                    this.form.scene = '日常积累'
+                    this.form.scene = 'interview'
                 } else {
                     console.log(res)
                     this.$message({

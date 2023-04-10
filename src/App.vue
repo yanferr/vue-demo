@@ -10,6 +10,8 @@
 
         <el-menu-item index="/label">标签管理</el-menu-item>
 
+        <el-menu-item index="/aa">推送管理</el-menu-item>
+
       </el-menu>
     </el-header>
 
